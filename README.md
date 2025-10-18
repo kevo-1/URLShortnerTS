@@ -24,7 +24,6 @@ This project was for learning and exploring **HTTP redirections**, **ORMs (Prism
 - **PostgreSQL** – Relational database  
 - **Redis** – Caching layer  
 - **CryptoJS (MD5)** – URL hashing  
-- **HTML + JS** – Minimal front-end interface  
 
 ---
 
