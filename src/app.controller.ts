@@ -11,16 +11,21 @@ import {
 import type { Response } from 'express';
 import { DbServices } from './Db/db.service';
 
-@Controller('URLShort')
+@Controller()
 export class AppController {
   constructor(private readonly dbService: DbServices) {}
 
-  @Get()
+  @Get('health')
+  healthCheck() {
+    return { status: 'ok', timestamp: new Date().toISOString() };
+  }
+
+  @Get('URLShort')
   getAll() {
     return this.dbService.getAll();
   }
 
-  @Get('/:hash')
+  @Get('URLShort/:hash')
   async redirectToOriginal(@Param('hash') hash: string, @Res() res: Response) {
     try {
       const original = await this.dbService.getOriginal(hash);
@@ -38,7 +43,7 @@ export class AppController {
     }
   }
 
-  @Post()
+  @Post('URLShort')
   async convertToHash(
     @Body('original') original: string,
     @Res() res: Response,
@@ -46,8 +51,10 @@ export class AppController {
     try {
       const hash: string = this.dbService.hashUrl(original).slice(0, 10);
       await this.dbService.saveToDb(original, hash);
+      const baseUrl =
+        process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
       res.status(HttpStatus.OK).json({
-        data: `http://localhost:3000/URLShort/${hash}`,
+        data: `${baseUrl}/URLShort/${hash}`,
       });
     } catch (error) {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -56,7 +63,7 @@ export class AppController {
     }
   }
 
-  @Delete('/:hash')
+  @Delete('URLShort/:hash')
   async removeHash(@Param('hash') hash: string, @Res() res: Response) {
     try {
       await this.dbService.removeFromDb(hash);
