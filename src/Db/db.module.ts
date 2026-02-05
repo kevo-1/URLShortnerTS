@@ -10,8 +10,8 @@ import { DbServices } from './db.service';
       useFactory: async () => {
         try {
           const store = await redisStore({
-            host: 'localhost',
-            port: 6379,
+            host: process.env.REDIS_HOST || 'localhost',
+            port: parseInt(process.env.REDIS_PORT || '6379'),
             ttl: 60 * 5,
           });
           console.log('Redis store created successfully');
