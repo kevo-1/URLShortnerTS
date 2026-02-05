@@ -18,6 +18,7 @@ import { DbServices } from './db.service';
           const store = await redisStore({
             host: process.env.REDIS_HOST,
             port: parseInt(process.env.REDIS_PORT || '6379'),
+            password: process.env.REDIS_PASSWORD,
             ttl: 60 * 5,
           });
           console.log('Redis store created successfully');
