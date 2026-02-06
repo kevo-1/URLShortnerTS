@@ -28,6 +28,9 @@ RUN npx prisma generate
 # Copy built application
 COPY --from=builder /app/dist ./dist
 
+# Copy public folder for static frontend
+COPY --from=builder /app/public ./public
+
 # Expose port
 EXPOSE 3000
 
