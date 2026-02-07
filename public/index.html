@@ -147,16 +147,6 @@
         word-break: break-all;
       }
 
-      .delete-btn {
-        padding: 8px 16px;
-        background: #e74c3c;
-        font-size: 14px;
-      }
-
-      .delete-btn:hover {
-        background: #c0392b;
-      }
-
       .empty-state {
         text-align: center;
         padding: 40px;
@@ -224,7 +214,8 @@
     </div>
 
     <script>
-      const API_BASE = 'https://urlshortnerts-production-48bb.up.railway.app/URLShort';
+      const API_BASE =
+        'https://urlshortnerts-production-48bb.up.railway.app/URLShort';
 
       async function shortenUrl() {
         const input = document.getElementById('urlInput');
@@ -291,7 +282,6 @@
                 </a>
               </div>
             </div>
-            <button class="delete-btn" onclick="deleteUrl('${item.hash}')">Delete</button>
           </div>
         `,
             )
@@ -299,24 +289,6 @@
         } catch (err) {
           list.innerHTML =
             '<div class="empty-state">Failed to load URLs. Is the server running?</div>';
-        }
-      }
-
-      async function deleteUrl(hash) {
-        if (!confirm('Are you sure you want to delete this URL?')) return;
-
-        try {
-          const res = await fetch(`${API_BASE}/${hash}`, {
-            method: 'DELETE',
-          });
-
-          if (res.ok) {
-            loadUrls();
-          } else {
-            showError('Failed to delete URL');
-          }
-        } catch (err) {
-          showError('Network error');
         }
       }
 
