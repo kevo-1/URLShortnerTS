@@ -110,55 +110,6 @@
         text-decoration: underline;
       }
 
-      .urls-list {
-        margin-top: 20px;
-      }
-
-      .url-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        background: #f9f9f9;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        transition: all 0.3s;
-      }
-
-      .url-item:hover {
-        background: #f0f0f0;
-        transform: translateX(4px);
-      }
-
-      .url-info {
-        flex: 1;
-        margin-right: 16px;
-      }
-
-      .url-short {
-        font-weight: 600;
-        color: #667eea;
-        margin-bottom: 4px;
-      }
-
-      .url-original {
-        font-size: 14px;
-        color: #666;
-        word-break: break-all;
-      }
-
-      .empty-state {
-        text-align: center;
-        padding: 40px;
-        color: #999;
-      }
-
-      .loading {
-        text-align: center;
-        padding: 20px;
-        color: #667eea;
-      }
-
       .error {
         padding: 16px;
         background: #fee;
@@ -201,16 +152,6 @@
         <div id="result" class="result"></div>
         <div id="error" class="error"></div>
       </div>
-
-      <div class="card">
-        <h2 class="section-title">All Shortened URLs</h2>
-        <button onclick="loadUrls()" style="margin-bottom: 20px">
-          Refresh List
-        </button>
-        <div id="urlsList" class="urls-list">
-          <div class="loading">Loading...</div>
-        </div>
-      </div>
     </div>
 
     <script>
@@ -247,7 +188,6 @@
           `;
             resultDiv.classList.add('show');
             input.value = '';
-            loadUrls();
           } else {
             showError('Failed to shorten URL');
           }
@@ -256,49 +196,11 @@
         }
       }
 
-      async function loadUrls() {
-        const list = document.getElementById('urlsList');
-        list.innerHTML = '<div class="loading">Loading...</div>';
-
-        try {
-          const res = await fetch(API_BASE);
-          const urls = await res.json();
-
-          if (!urls || urls.length === 0) {
-            list.innerHTML =
-              '<div class="empty-state">No URLs yet. Create one above!</div>';
-            return;
-          }
-
-          list.innerHTML = urls
-            .map(
-              (item) => `
-          <div class="url-item">
-            <div class="url-info">
-              <div class="url-short">${item.original}</div>
-              <div class="url-original">
-                <a href="${API_BASE}/${item.hash}" target="_blank">
-                  ${API_BASE}/${item.hash}
-                </a>
-              </div>
-            </div>
-          </div>
-        `,
-            )
-            .join('');
-        } catch (err) {
-          list.innerHTML =
-            '<div class="empty-state">Failed to load URLs. Is the server running?</div>';
-        }
-      }
-
       function showError(msg) {
         const errorDiv = document.getElementById('error');
         errorDiv.textContent = msg;
         errorDiv.classList.add('show');
       }
-
-      loadUrls();
     </script>
   </body>
 </html>
