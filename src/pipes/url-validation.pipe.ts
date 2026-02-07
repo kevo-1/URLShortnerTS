@@ -38,7 +38,11 @@ export class UrlValidationPipe implements PipeTransform<string, string> {
         );
       }
 
-      return url;
+      if (parsed.hostname.startsWith('www.')) {
+        parsed.hostname = parsed.hostname.slice(4);
+      }
+
+      return parsed.toString();
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
