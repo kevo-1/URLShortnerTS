@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { DbServices } from './Db/db.service';
+import { UrlValidationPipe } from './pipes/url-validation.pipe';
 
 @Controller()
 export class AppController {
@@ -45,7 +46,7 @@ export class AppController {
 
   @Post('URLShort')
   async convertToHash(
-    @Body('original') original: string,
+    @Body('original', UrlValidationPipe) original: string,
     @Res() res: Response,
   ) {
     try {
